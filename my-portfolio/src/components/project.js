@@ -1,6 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Project = () => {
+
+    const [project, setProject] = useState([]);
+
+    useEffect(() => {
+        axios.get('/api/project')
+            .then(response => setProject(response.data))
+            .catch(error => console.error(error));
+    }, [])
     return (
         <section id='project' className='bg-[#132432] pt-16'>
             <div name='project' className='w-full md:h-screen text-gray-300'>
@@ -13,26 +22,29 @@ const Project = () => {
                     </div>
 
                     {/* container for projects */}
+
                     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    <div className="bg-[#2d4d79] shadow-lg shadow-[#040c16] group container rounded-md flex justify-center text-center items-center mx-auto content-div">
+                        {project.map((item, index) => (
+                            <div key={index} className="bg-[#435585] shadow-lg shadow-[#040c16] group container rounded-md flex justify-center text-center items-center mx-auto content-div">
                                 {/* Hover effect for images */}
                                 <div className="p-2 opacity-100">
                                     <span className="text-2xl font bold text-white tracking-wider">
-                                        Name
+                                        {item.name}
                                     </span>
                                     <div className="pt-2 text-center">
-                                        <span> Tech Used</span>
+                                        <span>{item.technologiesUsed}</span>
                                     </div>
                                     <div className="pt-2 text-center">
-                                        <span>Desc</span>
+                                        <span>{item.description}</span>
                                     </div>
                                 </div>
                             </div>
+                        ))}
                     </div>
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
 export default Project;
